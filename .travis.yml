@@ -3,10 +3,10 @@ mono: none
 dotnet: 5.0.302
 solution: TripleTriad.sln
 before_install:
- - dotnet -v
+ - dotnet --info
 install:
  - dotnet restore
- - dotnet tool install -g dotnet-format
+ - dotnet tool install dotnet-format
 script:
  - dotnet test
  - dotnet format --check
