@@ -57,7 +57,7 @@ namespace TripleTriad.Tests.Services.GameLogicServiceTests
             {
                 tempCard = new Mock<ICard>();
                 tempCard.SetupGet(x => x.Owner).Returns(_mockPlayer1.Object);
-                tempCard.SetupGet(x => x.Points).Returns(new int[] { 10, 10, 10, 10});
+                tempCard.SetupGet(x => x.Points).Returns(new int[] { 10, 10, 10, 10 });
 
                 if (i >= 0 && i < 2)
                     tempCard.SetupGet(x => x.YCoord).Returns(0);

@@ -10,7 +10,7 @@ namespace TripleTriad.Models.Entity
         public int? YCoord { get; set; }
         public int[] Points { get; set; }
 
-        public Card (IPlayer owner, int valueRight, int valueUp, int valueLeft, int valueDown) : this(owner, new int[] { valueRight, valueUp, valueLeft, valueDown})
+        public Card(IPlayer owner, int valueRight, int valueUp, int valueLeft, int valueDown) : this(owner, new int[] { valueRight, valueUp, valueLeft, valueDown })
         {
         }
         public Card(IPlayer owner, int[] points)
