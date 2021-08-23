@@ -1,0 +1,144 @@
+{
+  "cards": [
+    {
+      "id": 1,
+      "name": "Dodo",
+      "points": [
+        2,
+        4,
+        4,
+        3
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Tonberry",
+      "points": [
+        2,
+        2,
+        2,
+        7
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Sabotender",
+      "points": [
+        3,
+        4,
+        3,
+        3
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Spriggan",
+      "points": [
+        3,
+        2,
+        4,
+        4
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Pudding",
+      "points": [
+        4,
+        2,
+        5,
+        3
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Bomb",
+      "points": [
+        4,
+        3,
+        3,
+        3
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Mandragora",
+      "points": [
+        2,
+        4,
+        3,
+        5
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Coblyn",
+      "points": [
+        3,
+        3,
+        4,
+        3
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Morbol",
+      "points": [
+        2,
+        5,
+        5,
+        2
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Coeurl",
+      "points": [
+        5,
+        2,
+        5,
+        2
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Ahriman",
+      "points": [
+        5,
+        5,
+        2,
+        2
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Goobbue",
+      "points": [
+        5,
+        2,
+        2,
+        5
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Chocobo",
+      "points": [
+        7,
+        3,
+        1,
+        2
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Amalj'aa",
+      "points": [
+        4,
+        1,
+        1,
+        7
+      ]
+    }
+  ]
+}

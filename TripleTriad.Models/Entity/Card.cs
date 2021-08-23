@@ -5,6 +5,7 @@ namespace TripleTriad.Models.Entity
     public class Card : ICard
     {
         public int Id { get; set; }
+        public string Name { get; set; }
         public IPlayer Owner { get; set; }
         public int? XCoord { get; set; }
         public int? YCoord { get; set; }
