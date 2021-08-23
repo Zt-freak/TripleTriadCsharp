@@ -24,4 +24,8 @@
     <ProjectReference Include="..\TripleTriad.Models\TripleTriad.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Entity\" />
+  </ItemGroup>
+
 </Project>
