@@ -6,7 +6,7 @@ before_install:
  - dotnet --info
 install:
  - dotnet restore
- - dotnet tool install dotnet-format
+ - dotnet tool install -g dotnet-format
 script:
  - dotnet test
  - dotnet format --check
