@@ -1,9 +1,13 @@
 language: csharp
 mono: none
 dotnet: 5.0.302
-script:
+solution: TripleTriad.sln
+before_install:
+ - dotnet -v
+install:
  - dotnet restore
- - dotnet test
  - dotnet tool install -g dotnet-format
+script:
+ - dotnet test
  - dotnet format --check
  - dotnet build
