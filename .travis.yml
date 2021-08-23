@@ -4,4 +4,6 @@ dotnet: 5.0.302
 script:
  - dotnet restore
  - dotnet test
+ - dotnet tool install -g dotnet-format
+ - dotnet format --check
  - dotnet build
