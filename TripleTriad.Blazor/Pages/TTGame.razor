@@ -1,0 +1,86 @@
+﻿@page "/ttgame"
+@inject HttpClient Http
+
+<h1>Triple Triad</h1>
+
+@if (jsonCards == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @* <table class="table">
+        <tbody>
+            @foreach (var card in cardsInGame)
+            {
+            <tr>
+                <td>@card.Name</td>
+                <td>@card.Owner.Id</td>
+                <td>@card.Points[0]</td>
+                <td>@card.Points[1]</td>
+                <td>@card.Points[2]</td>
+                <td>@card.Points[3]</td>
+            </tr>
+            }
+        </tbody>
+    </table> *@
+}
+
+@code {
+    private JsonCardRoot jsonCards;
+    private Player player1 = new Player() { Id = 1, TeamColor = Color.Blue};
+    private Player player2 = new Player() { Id = 2, TeamColor = Color.Red};
+    private List<Card> cardsInGame = new List<Card>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        jsonCards = await Http.GetFromJsonAsync<JsonCardRoot>("https://triad.raelys.com/api/cards?limit=14");
+        Player tempPlayer;
+        Card tempCard;
+        for(int i = 0; i < jsonCards.Results.Count(); i++)
+        {
+            if ( i % 2 == 0)
+            {
+                tempPlayer = player1;
+            }
+            else
+            {
+                tempPlayer = player2;
+            }
+
+            tempCard = new Card(tempPlayer,
+                jsonCards.Results[i].Stats.Numeric.Right,
+                jsonCards.Results[i].Stats.Numeric.Top,
+                jsonCards.Results[i].Stats.Numeric.Left,
+                jsonCards.Results[i].Stats.Numeric.Bottom);
+            tempCard.Name = jsonCards.Results[i].Name;
+
+            cardsInGame.Add(tempCard);
+        }
+    }
+
+    public class JsonCardRoot
+    {
+        public List<JsonCard> Results { get; set; }
+    }
+
+    public class JsonCard
+    {
+        public string Name { get; set; }
+
+        public JsonCardStats Stats { get; set; }
+    }
+
+    public class JsonCardStats
+    {
+        public JsonCardStatsNumeric Numeric { get; set; }
+    }
+
+    public class JsonCardStatsNumeric
+    {
+        public int Right { get; set; }
+        public int Top { get; set; }
+        public int Left { get; set; }
+        public int Bottom { get; set; }
+    }
+}

@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TripleTriad.Data\TripleTriad.Data.csproj" />
+    <ProjectReference Include="..\TripleTriad.Models\TripleTriad.Models.csproj" />
+  </ItemGroup>
+
+</Project>
