@@ -3,37 +3,122 @@
 
 <h1>Triple Triad</h1>
 
+<style>
+    .tt-cardoptions {
+        display: flex;
+        width: 500px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .tt-card {
+        width: 100px;
+        height: 120px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 5px;
+        box-shadow: 0px 1px 1px black;
+        flex-direction: column;
+        box-sizing: border-box;
+    }
+
+    .tt-cardoptions .tt-card:hover {
+        border: 2px solid yellow;
+        cursor: pointer;
+    }
+
+    .tt-img {
+        width: calc(100% - 4px);
+    }
+
+    .tt-cardoptions .tt-card:hover .tt-img {
+        width: calc(100%);
+    }
+
+    .tt-gameboard {
+        background: grey;
+        display: grid;
+        padding: 10px;
+        grid-template-columns: 120px 120px 120px;
+        width: fit-content;
+        column-gap: 10px;
+        row-gap: 10px;
+        box-shadow: 0px 1px 1px black;
+        border-radius: 5px;
+    }
+
+    .tt-field {
+        width: 120px;
+        height: 140px;
+        background: lightgrey;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0px 1px 1px black;
+        border-radius: 5px;
+    }
+
+    .tt-field:empty {
+        cursor:pointer;
+    }
+</style>
+
 @if (jsonCards == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    @* <table class="table">
-        <tbody>
-            @foreach (var card in cardsInGame)
-            {
-            <tr>
-                <td>@card.Name</td>
-                <td>@card.Owner.Id</td>
-                <td>@card.Points[0]</td>
-                <td>@card.Points[1]</td>
-                <td>@card.Points[2]</td>
-                <td>@card.Points[3]</td>
-            </tr>
-            }
-        </tbody>
-    </table> *@
+<div class="tt-cardoptions">
+    @foreach (var card in playableCards)
+    {
+        <div class="tt-card" style="background-color: rgb(@card.Owner.TeamColor.R, @card.Owner.TeamColor.G, @card.Owner.TeamColor.B);" @onclick="@(()=>SelectCard(@card))">
+            <img src="https://triad.raelys.com/images/cards/large/@(card.Id).png" class="tt-img" />
+        </div>
+    }
+</div>
+
+<span>Currently selected: @currentCard.Name</span>
+
+<div class="tt-gameboard">
+    @for (int i = 0; i < board.Fields.GetLength(0); i++)
+    {
+        var localI = i;
+        @for (int j = 0; j < board.Fields.GetLength(1); j++)
+        {
+            var localJ = j;
+            <div class="tt-field" @onclick="@(() => SelectField(localI,localJ))">
+                @if (board.Fields[i, j].Occupant != null)
+                {
+                    <div class="tt-card" style="background-color: rgb(@board.Fields[i,j].Occupant.Owner.TeamColor.R, @board.Fields[i,j].Occupant.Owner.TeamColor.G, @board.Fields[i,j].Occupant.Owner.TeamColor.B);">
+                        <img src="https://triad.raelys.com/images/cards/large/@(board.Fields[i,j].Occupant.Id).png" class="tt-img" />
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>
 }
 
 @code {
     private JsonCardRoot jsonCards;
     private Player player1 = new Player() { Id = 1, TeamColor = Color.Blue};
     private Player player2 = new Player() { Id = 2, TeamColor = Color.Red};
+    private Player currentPlayer = null;
     private List<Card> cardsInGame = new List<Card>();
+    private List<Card> playableCards = new List<Card>();
+    private Card currentCard { get; set; }
+    private Card cardPlaceholder = new Card(new Player() { Id = 1000, TeamColor = Color.Black }, 0, 0, 0, 0);
+    private GameLogicService gameService = new GameLogicService();
+
+
+    private Board board = new Board();
 
     protected override async Task OnInitializedAsync()
     {
+        currentCard = cardPlaceholder;
+        currentPlayer = player1;
         jsonCards = await Http.GetFromJsonAsync<JsonCardRoot>("https://triad.raelys.com/api/cards?limit=14");
         Player tempPlayer;
         Card tempCard;
@@ -54,8 +139,63 @@ else
                 jsonCards.Results[i].Stats.Numeric.Left,
                 jsonCards.Results[i].Stats.Numeric.Bottom);
             tempCard.Name = jsonCards.Results[i].Name;
+            tempCard.Id = jsonCards.Results[i].Id;
 
             cardsInGame.Add(tempCard);
+        }
+        StartGame();
+    }
+
+    protected void StartGame()
+    {
+        playableCards.Clear();
+        foreach (var card in cardsInGame)
+        {
+            if (card.XCoord == null && card.Owner == currentPlayer)
+            {
+                playableCards.Add(card);
+            }
+        }
+    }
+
+    private void SelectCard(Card card)
+    {
+        currentCard = card;
+    }
+
+    private void SelectField(int xCoord, int yCoord)
+    {
+        if (currentCard != null && currentCard != cardPlaceholder && board.Fields[xCoord, yCoord].Occupant == null)
+        {
+            board.Fields[xCoord, yCoord].Occupant = currentCard;
+            board.Fields[xCoord, yCoord].Occupant.XCoord = xCoord;
+            board.Fields[xCoord, yCoord].Occupant.YCoord = yCoord;
+
+            gameService.CheckNeighbours(board.Fields, board.Fields[xCoord, yCoord].Occupant);
+
+            currentCard = cardPlaceholder;
+
+            if (currentPlayer == player1)
+            {
+                currentPlayer = player2;
+            }
+            else
+            {
+                currentPlayer = player1;
+            }
+            GetNewPlayableCards();
+        }
+    }
+
+    private void GetNewPlayableCards()
+    {
+        playableCards.Clear();
+        foreach (var card in cardsInGame)
+        {
+            if (card.XCoord == null && card.Owner == currentPlayer)
+            {
+                playableCards.Add(card);
+            }
         }
     }
 
@@ -66,6 +206,7 @@ else
 
     public class JsonCard
     {
+        public int Id { get; set; }
         public string Name { get; set; }
 
         public JsonCardStats Stats { get; set; }

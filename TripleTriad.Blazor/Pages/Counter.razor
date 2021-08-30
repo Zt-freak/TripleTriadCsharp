@@ -1,16 +1,38 @@
 ﻿@page "/counter"
 
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+
 <h1>Counter</h1>
 
 <p>Current count: @currentCount</p>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<p>Last button clicked: @lastButtonClicked</p>
+
+<button @ref=button1 class="btn btn-primary" @onclick="@(()=>IncrementCount(@button1))">Click me</button>
+<button @ref=button2 class="btn btn-primary" @onclick="@(()=>IncrementCount1(@button2))">Click me</button>
+
 
 @code {
-    private int currentCount = 0;
 
-    private void IncrementCount()
+    private ElementReference button1;
+    private ElementReference button2;
+
+    private int currentCount = 0;
+    private string lastButtonClicked = "None";
+
+    private async void IncrementCount(ElementReference element)
     {
         currentCount++;
+        lastButtonClicked = "Button 1";
+        await JSRuntime.InvokeVoidAsync("setElementText", element, "Button 1 was clicked");
+
+    }
+    private async void IncrementCount1(ElementReference element)
+    {
+        currentCount++;
+
+        lastButtonClicked = "Button 2";
+        await JSRuntime.InvokeVoidAsync("setElementText", element, "Button 2 was clicked");
     }
 }

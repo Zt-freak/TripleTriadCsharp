@@ -2,6 +2,6 @@
 {
     public interface IBoard
     {
-        IField[,] Fields { get; set; }
+        Field[,] Fields { get; set; }
     }
 }
